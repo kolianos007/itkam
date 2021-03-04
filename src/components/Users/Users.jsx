@@ -1,6 +1,8 @@
 import React from 'react'
 import styles from './Users.module.css'
 import userPhoto from "../../assets/img/user.png";
+import Preloader from '../common/Preloader/Preloader';
+import {NavLink} from 'react-router-dom'
 
 
 const Users = (props) => {
@@ -12,6 +14,7 @@ const Users = (props) => {
     }
     return (
         <div>
+          {props.isFetching ? <Preloader /> : null}
         <div>
           {pages.map(p => {
             return <span key={p} className={props.currentPage === p ? styles.selectedPage : ''} onClick={() => {props.onPageChange(p)}}>{p}</span>
@@ -21,11 +24,13 @@ const Users = (props) => {
           <div key={u.id}>
             <span>
               <div>
-                <img
-                  src={u.photos.small != null ? u.photos.small : userPhoto}
-                  alt={u.id}
-                  className={styles.userPhoto}
-                />
+                <NavLink to={'/profile/' + u.id}>
+                  <img
+                    src={u.photos.small != null ? u.photos.small : userPhoto}
+                    alt={u.id}
+                    className={styles.userPhoto}
+                  />
+                </NavLink>
               </div>
               <div>
                 {u.followed ? (
