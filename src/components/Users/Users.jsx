@@ -3,6 +3,7 @@ import styles from './Users.module.css'
 import userPhoto from "../../assets/img/user.png";
 import Preloader from '../common/Preloader/Preloader';
 import {NavLink} from 'react-router-dom'
+import { usersApi } from '../../api/api';
 
 
 const Users = (props) => {
@@ -36,7 +37,12 @@ const Users = (props) => {
                 {u.followed ? (
                   <button
                     onClick={() => {
-                      props.unfollow(u.id);
+                      usersApi.unfollowUser(u.id)
+                        .then((data) => {
+                          if(data.resultCode === 0) {
+                            props.unfollow(u.id);
+                          }
+                        });
                     }}
                   >
                     Unfollow
@@ -44,7 +50,12 @@ const Users = (props) => {
                 ) : (
                   <button
                     onClick={() => {
-                      props.follow(u.id);
+                      usersApi.followUser(u.id)
+                        .then((data) => {
+                          if(data.resultCode === 0) {
+                            props.follow(u.id);
+                          }
+                        });
                     }}
                   >
                     Follow
