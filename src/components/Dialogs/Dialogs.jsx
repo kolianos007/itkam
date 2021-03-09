@@ -1,9 +1,10 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import DialogItem from "./DialogItem/DialogItem";
 import classes from "./Dialogs.module.css";
 import Message from "./Message/Message";
 
-const Dialogs = ({ dialogsPage, sendMessage, updateNewMessageBody }) => {
+const Dialogs = ({ dialogsPage, sendMessage, updateNewMessageBody, isAuth }) => {
   let state = dialogsPage;
   let dialogsElement = state.dialogsData.map((dialog) => (
     <DialogItem key={dialog.id} name={dialog.name} id={dialog.id} />

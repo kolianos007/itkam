@@ -12,15 +12,21 @@ export const usersApi = {
     getUsers(currentPage = 1, pageSize = 10) {
         return instance.get(`users?page=${currentPage}&count=${pageSize}`).then(response => response.data)
     },
-    getIsAuth() {
-        return instance.get("auth/me").then(response => response.data)
-    },
     unfollowUser(userId) {
         return instance.delete(`follow/${userId}`).then(response => response.data)
     },
     followUser(userId) {
         return instance.post(`follow/${userId}`).then(response => response.data)
+    },
+    getProfile(userId) {
+        return instance.get(`profile/${userId}`).then(response => response.data)
     }
+}
+
+export const authApi = {
+    me() {
+        return instance.get("auth/me").then(response => response.data)
+    },
 }
 
 // export const getUsers = (currentPage = 1, pageSize = 10) => {
