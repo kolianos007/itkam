@@ -1,9 +1,9 @@
 import axios from "axios";
-import { usersApi } from "../api/api";
+import { profileApi, usersApi } from "../api/api";
 
 const ADD_POST = "ADD_POST";
-const UPDATE_NEW_POST_TEXT = "UPDATE_NEW_POST_TEXT";
 const SET_USER_PROFILE = "SET_USER_PROFILE"
+const SET_STATUS = "SET_STATUS"
 
 
 let initialState = {
@@ -11,8 +11,8 @@ let initialState = {
     { id: 1, message: "hi, how are you", likesCount: 12 },
     { id: 2, message: "It's my first post", likesCount: 11 },
   ],
-  newPostText: "it-kamasutra.com",
-  userProfile: null
+  userProfile: null,
+  status: ''
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -20,41 +20,41 @@ const profileReducer = (state = initialState, action) => {
     case ADD_POST:
       let newPost = {
         id: 3,
-        message: state.newPostText,
+        message: action.newPostText,
         likesCount: 22,
       };
       return {
         ...state,
-        newPostText: '',
         posts: [...state.posts, newPost]
-      }
-    case UPDATE_NEW_POST_TEXT:
-      return {
-        ...state,
-        newPostText: action.newText
       }
     case SET_USER_PROFILE:
       return {
           ...state,
           userProfile: action.profile
       }
+    case SET_STATUS:
+      return {
+        ...state, 
+        status: action.status
+      }
     default:
       return state;
   }
 };
 
-export let addPostActionCreator = () => ({
+export let addPostActionCreator = (newPostText) => ({
   type: ADD_POST,
-});
-
-export let updateNewPostTextActionCreator = (text) => ({
-  type: UPDATE_NEW_POST_TEXT,
-  newText: text,
+  newPostText
 });
 
 export let setUserProfile = (profile) => ({
   type: SET_USER_PROFILE,
   profile
+})
+
+export const setStatus = (status) => ({
+  type: SET_STATUS,
+  status
 })
 
 //thunk-creator
@@ -64,6 +64,24 @@ export const getUserProfile = (userId) => {
         dispatch(setUserProfile(data))
       }
     )
+  }
+}
+
+export const getStatus = (userId) => {
+  return (dispatch) => {
+    profileApi.getStatus(userId).then((response) => {
+      dispatch(setStatus(response.data))
+    })
+  }
+}
+
+export const updateStatus = (status) => {
+  return (dispatch) => {
+    profileApi.updateStatus(status).then((response) => {
+      if(response.data.resultCode === 0) {
+        dispatch(setStatus(response.data.status))
+      }
+    })
   }
 }
 
