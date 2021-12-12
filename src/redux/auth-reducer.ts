@@ -1,5 +1,5 @@
 import { stopSubmit } from "redux-form";
-import { authApi } from "../api/api";
+import { authApi, ResultCodesEnum } from "../api/api";
 
 const SET_AUTH_USER_DATA = "SET_AUTH_USER_DATA";
 
@@ -44,7 +44,7 @@ export const setAuthUserData = (id: number | null, email: string | null, login: 
 //thunk-creator
 export const getAuthUserData = () => (dispatch: any) => {
   return authApi.me().then((data) => {
-    if (data.resultCode === 0) {
+    if (data.resultCode === ResultCodesEnum.Success) {
       const { id, login, email } = data.data;
       dispatch(setAuthUserData(id, email, login, true));
     }
@@ -53,7 +53,7 @@ export const getAuthUserData = () => (dispatch: any) => {
 
 export const login = (email: string, password: string, rememberMe: boolean) => (dispatch: any) => {
   authApi.login(email, password, rememberMe).then((data) => {
-    if (data.resultCode === 0) {
+    if (data.resultCode === ResultCodesEnum.Success) {
       dispatch(getAuthUserData());
     } else {
       const message =
